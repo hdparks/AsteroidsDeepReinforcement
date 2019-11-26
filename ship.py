@@ -17,6 +17,9 @@ class ship:
         # radius of the ship (will fit inside circle with radius r centered at (x,y) )
         self.r = 5
 
+        # Fire set to true when ship is firing a laser
+        self.fire = False
+
         # Keeps track of previous frame position, used for blitting
         self.blit_r = 10
         self.dx = None

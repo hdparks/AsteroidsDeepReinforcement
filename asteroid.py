@@ -15,5 +15,8 @@ class asteroid:
         self.blit_r = max(self.rs) + 3
         self.dirty = None
 
+        # Flag determining if asteroid was hit by a laser
+        self.hit = False
+
     def get_points(self):
         return list(zip(self.rs * np.cos(self.ss + self.theta) + self.x, self.rs * np.sin(self.ss + self.theta) + self.y))

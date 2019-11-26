@@ -1,4 +1,5 @@
-def run(ship):
+def run(ships):
     """ Add some drag to the ship to allow for better controllability """
-    ship.vx *= 0.95
-    ship.vy *= 0.95
+    for ship in ships:
+        ship.vx *= 0.95
+        ship.vy *= 0.95
