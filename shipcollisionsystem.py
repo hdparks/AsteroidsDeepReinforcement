@@ -3,6 +3,4 @@ def run(ships, objs):
     for ship in ships:
         for obj in objs:
             if abs(ship.x - obj.x) + abs(ship.y - obj.y) < ship.r + obj.r:
-                return True
-
-    return False
+                ship.hit = True

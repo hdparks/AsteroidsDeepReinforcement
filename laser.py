@@ -1,6 +1,6 @@
 import numpy as np
 
-class Lazer:
+class laser:
     def __init__(self,x,y,vx,vy):
         # Defines the head of the lazer
         self.x = x

@@ -5,11 +5,13 @@ import blitsystem
 import movesystem
 import treadmillsystem
 import drawsystem
+import drawlinessystem
 import playerinputsystem
 import shipcollisionsystem
 import shipdragsystem
 import firelasersystem
-import lasercollisisonsystem
+import lasercollisionsystem
+import hitdestroysystem
 
 from ship import ship
 from asteroid import asteroid
@@ -44,13 +46,16 @@ treadmillsystem.HEIGHT = HEIGHT
 drawsystem.pygame = pygame
 drawsystem.screen = screen
 
+drawlinessystem.pygame = pygame
+drawlinessystem.screen = screen
+
 playerinputsystem.pygame = pygame
 
 
 ## INITIALIZE GAME OBJECTS
 asteroids = [asteroid(x,y,10,10,None,vx,vy) for x, y,vx,vy in zip(np.random.random(10) * 600, np.random.random(10) * 400, np.random.randn(10), np.random.randn(10))]
 players = [ship(WIDTH/2, HEIGHT/2)] # Spawn player in the center
-lazers = []
+lasers = []
 
 def events():
     global mainloop # Access the global mainloop variable
@@ -70,35 +75,46 @@ def events():
 def loop():
     global mainloop # Access the global mainloop variable
 
+    # Destroy
+    hitdestroysystem.run(players)
+    if len(players) == 0:
+        mainloop = False
+        return
+
+    hitdestroysystem.run(asteroids)
+    if len(asteroids) == 0:
+        mainloop = False
+        return
+
+    hitdestroysystem.run(lasers)
+
+    # Create
+    newlasers = firelasersystem.run(players)
+    lasers.extend(newlasers)
+
     # Plan
     playerinputsystem.run(players)
 
     # Move
     shipdragsystem.run(players)
-    dirtysystem.run(asteroids + players + lazers)
-    movesystem.run(asteroids  + players + lazers)
+    movesystem.run(asteroids + players + lasers)
     treadmillsystem.run(asteroids + players)
 
     # Collide
-    shipcollisionsystem.run(players, asteroids):
-
-    lasercollisisonsystem.run(lasers, asteroids)
-
-    # Destroy
+    shipcollisionsystem.run(players, asteroids)
+    lasercollisionsystem.run(lasers, asteroids)
 
 
-    # Create
-    newlasers = firelasersystem.run(players)
-    lasers.extend(newlasers)
 
 def render():
     text = "FPS: {0:.2f}    Playtime: {1:.2f}".format(clock.get_fps(),playtime)
     pygame.display.set_caption(text) # Print framerate in titlebar
 
     # Blitting stage
-    blitsystem.run(asteroids + players)
+    blitsystem.run(asteroids + players + lasers)
 
     # Redraw stage
+    drawlinessystem.run(lasers)
     drawsystem.run(asteroids + players)
 
 

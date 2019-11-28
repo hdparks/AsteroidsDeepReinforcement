@@ -26,5 +26,8 @@ class ship:
         self.dy = None
         self.dirty = None
 
+        # Hit tracks if the ship has been hit or not (Fail condition)
+        self.hit = False
+
     def get_points(self):
         return list(zip(self.r * np.cos(self.points + self.theta) + self.x, self.r * np.sin(self.points + self.theta) + self.y))
