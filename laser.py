@@ -11,10 +11,8 @@ class laser:
         self.vy = vy
 
         # Defines the blitwork of the lazer (Could be shortened)
-        self.blit_r = max(abs(vx),abs(vy)) + 1
-        self.dx = None
-        self.dy = None
         self.dirty = None
+        self.dirtyrect = None
 
         # Flag determining if the laser has hit a target
         self.hit = False

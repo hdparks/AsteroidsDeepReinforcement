@@ -1,6 +1,5 @@
 import numpy as np
 import pygame
-import dirtysystem
 import blitsystem
 import movesystem
 import treadmillsystem
@@ -12,6 +11,7 @@ import shipdragsystem
 import firelasersystem
 import lasercollisionsystem
 import hitdestroysystem
+import laserclearsystem
 
 from ship import ship
 from asteroid import asteroid
@@ -22,7 +22,7 @@ pygame.init() # Initialize pygame
 WIDTH, HEIGHT = 200,200
 
 screen = pygame.display.set_mode((WIDTH,HEIGHT)) # Set screen size of pygame window
-background = pygame.Surface(screen.get_size()) # Create empty pygame surface
+background = pygame.Surface((WIDTH + 50, HEIGHT + 50 )) # Create empty pygame surface
 background.fill((255,255,255)) # Fill with white
 background = background.convert() # Convert surface to make blitting faster
 screen.blit(background, (0,0)) # Copy background onto screen
@@ -34,22 +34,26 @@ FPS = 30 # Desired framerate
 playtime = 0.0 # Tracks how long the game has been played
 
 # Initialize system variables
-dirtysystem.WIDTH = WIDTH
-dirtysystem.HEIGHT = HEIGHT
-dirtysystem.background = background
-
 blitsystem.screen = screen
+blitsystem.background = background
 
 treadmillsystem.WIDTH = WIDTH
 treadmillsystem.HEIGHT = HEIGHT
 
+laserclearsystem.WIDTH = WIDTH
+laserclearsystem.HEIGHT = HEIGHT
+
 drawsystem.pygame = pygame
 drawsystem.screen = screen
+drawsystem.background = background
 
 drawlinessystem.pygame = pygame
 drawlinessystem.screen = screen
+drawlinessystem.background = background
 
 playerinputsystem.pygame = pygame
+
+hitdestroysystem.screen = screen
 
 
 ## INITIALIZE GAME OBJECTS
@@ -87,6 +91,7 @@ def loop():
         return
 
     hitdestroysystem.run(lasers)
+    laserclearsystem.run(lasers)
 
     # Create
     newlasers = firelasersystem.run(players)
@@ -117,11 +122,11 @@ def render():
     drawlinessystem.run(lasers)
     drawsystem.run(asteroids + players)
 
+    pygame.display.flip()
 
 while mainloop:
     milliseconds = clock.tick(FPS) # Does not go faster than FPS cap
     playtime += milliseconds / 1000.0
-
 
     events() # compute actions
     loop() # change state

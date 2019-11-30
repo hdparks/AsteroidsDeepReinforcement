@@ -21,10 +21,8 @@ class ship:
         self.fire = False
 
         # Keeps track of previous frame position, used for blitting
-        self.blit_r = 10
-        self.dx = None
-        self.dy = None
         self.dirty = None
+        self.dirtyrect = None
 
         # Hit tracks if the ship has been hit or not (Fail condition)
         self.hit = False

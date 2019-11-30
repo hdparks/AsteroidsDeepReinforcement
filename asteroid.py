@@ -14,6 +14,7 @@ class asteroid:
 
         self.blit_r = max(self.rs) + 3
         self.dirty = None
+        self.dirtyrect = None
 
         # Flag determining if asteroid was hit by a laser
         self.hit = False
