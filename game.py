@@ -12,6 +12,7 @@ import firelasersystem
 import lasercollisionsystem
 import hitdestroysystem
 import laserclearsystem
+import asteroidsplitsystem
 
 from ship import ship
 from asteroid import asteroid
@@ -57,8 +58,8 @@ hitdestroysystem.screen = screen
 
 
 ## INITIALIZE GAME OBJECTS
-asteroids = [asteroid(x,y,10,10,None,vx,vy) for x, y,vx,vy in zip(np.random.random(10) * 600, np.random.random(10) * 400, np.random.randn(10), np.random.randn(10))]
-players = [ship(WIDTH/2, HEIGHT/2)] # Spawn player in the center
+asteroids = [asteroid(x,y,10,10,vx,vy) for x, y,vx,vy in zip(np.random.random(10) * 600, np.random.random(10) * 400, np.random.randn(10), np.random.randn(10))]
+players = [ship( WIDTH/2, HEIGHT/2)] # Spawn player in the dead center
 lasers = []
 
 def events():
@@ -79,6 +80,11 @@ def events():
 def loop():
     global mainloop # Access the global mainloop variable
 
+    # Create
+    asteroidsplitsystem.run(asteroids)
+    newlasers = firelasersystem.run(players)
+    lasers.extend(newlasers)
+
     # Destroy
     hitdestroysystem.run(players)
     if len(players) == 0:
@@ -92,10 +98,6 @@ def loop():
 
     hitdestroysystem.run(lasers)
     laserclearsystem.run(lasers)
-
-    # Create
-    newlasers = firelasersystem.run(players)
-    lasers.extend(newlasers)
 
     # Plan
     playerinputsystem.run(players)
@@ -124,7 +126,9 @@ def render():
 
     pygame.display.flip()
 
+iter = 0
 while mainloop:
+    iter += 1
     milliseconds = clock.tick(FPS) # Does not go faster than FPS cap
     playtime += milliseconds / 1000.0
 
@@ -134,3 +138,4 @@ while mainloop:
 
 pygame.quit()
 print("This game was played for {0:.2f} seconds".format(playtime))
+print("Average framerate: {0:.2f} frames per second".format(iter /  playtime))
