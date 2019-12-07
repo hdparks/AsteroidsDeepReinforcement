@@ -1,4 +1,4 @@
-from asteroid import asteroid
+from entities.asteroid import asteroid
 import numpy as np
 
 def run(asteroids):

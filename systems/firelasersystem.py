@@ -1,4 +1,4 @@
-from laser import laser
+from entities.laser import laser
 import numpy as np
 
 def run(objs):
