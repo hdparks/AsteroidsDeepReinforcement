@@ -64,49 +64,39 @@ def rollout(policy_network):
 
 
     # These are used to define the rollout, and are what will be returned
-    states = []
-    actions = []
-    action_dists = []
-    rewards = []
-    done = []
+    rollout = []
     asteroids_destroyed = 0
-
+    prev_state = None
     def events(iter):
         global mainloop # Access the global mainloop variable
 
         # Here is where the interaction happens: state is gathered and actions are taken
 
+
         # On the first round, do nothing (policy network needs information from 2 frames)
-        if iter == 0:
-            states.append(pygame.surfarray.array2d(screen))
+        if prev_state = None:
+            prev_state = pygame.surfarray.array2d(screen)
 
-        else:
-            states.append(pygame.surfarray.array2d(screen))
-            state_frames = np.array([states[-1],states[-2]]) # Current state is the last two frames
+        state = np.array([ pygame.surfarray.array2d(screen), prev_state])  # Current state is the last two frames
 
-            action, a_dist = policy_network.at_state(state_frames) # Returns an array of probabilities size = action space
+        action, a_dist = policy_network.at_state(state) # Returns an array of probabilities size = action space
 
-            # Draw from the action_dist to get the action
+        # Draw from the action_dist to get the action
+        rollout.append((state,action,a_dist,0)) # reward = 0, done = 0
 
-            actions.append(action)
-            action_dists.append(a_dist)
+        # Take action
+        if action[0]: # Jet forward
+            players[0].vx += np.cos(player.theta)
+            players[0].vy += np.sin(player.theta)
 
-            rewards.append(0)
-            done.append(0)
+        if action[1]: # Rotate left
+            players[0].theta -= 0.12
 
-            # Take action
-            if action[0]: # Jet forward
-                players[0].vx += np.cos(player.theta)
-                players[0].vy += np.sin(player.theta)
+        if action[2]: # Rotate right
+            players[0].theta += 0.12
 
-            if action[1]: # Rotate left
-                players[0].theta -= 0.12
-
-            if action[2]: # Rotate right
-                players[0].theta += 0.12
-
-            if action[3]: # Fire lasers
-                players[0].fire = True
+        if action[3]: # Fire lasers
+            players[0].fire = True
 
     def loop():
         global mainloop # Access the global mainloop variable
@@ -173,11 +163,10 @@ def rollout(policy_network):
     pygame.quit()
 
     # Update final rollout entry
-    rewards[-1] = 0 if len(asteroids) > 0 else 1
-    done[-1] = 1
+    rollout[-1][-1] = 0 if len(asteroids) > 0 else 1
 
     print()
     print("This simulation was run for {0:.2f} seconds".format(playtime))
     print("Average framerate: {0:.2f} frames per second".format(iter /  playtime))
 
-    return states, actions, action_dists rewards, done, asteroids_destroyed
+    return rollout, asteroids_destroyed
