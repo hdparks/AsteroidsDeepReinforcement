@@ -66,8 +66,10 @@ def rollout(policy_network):
     # These are used to define the rollout, and are what will be returned
     states = []
     actions = []
+    action_dists = []
     rewards = []
     done = []
+    asteroids_destroyed = 0
 
     def events(iter):
         global mainloop # Access the global mainloop variable
@@ -82,11 +84,12 @@ def rollout(policy_network):
             states.append(pygame.surfarray.array2d(screen))
             state_frames = np.array([states[-1],states[-2]]) # Current state is the last two frames
 
-            action_dist = policy_network.at_state(state_frames) # Returns an array of probabilities size = action space
+            action, a_dist = policy_network.at_state(state_frames) # Returns an array of probabilities size = action space
 
             # Draw from the action_dist to get the action
-            action = np.random.random(4) <= action_dist
+
             actions.append(action)
+            action_dists.append(a_dist)
 
             rewards.append(0)
             done.append(0)
@@ -119,7 +122,8 @@ def rollout(policy_network):
             mainloop = False
             return
 
-        hitdestroysystem.run(asteroids)
+        asteroids_destroyed += hitdestroysystem.run(asteroids)
+
         if len(asteroids) == 0:
             mainloop = False
             return
@@ -159,8 +163,6 @@ def rollout(policy_network):
         loop() # change state
         render() # print to screen
 
-
-
         t_loop.set_description("Run time: {}, Clock time: {}".format(iter / 30, playtime))
         iter += 1
 
@@ -178,4 +180,4 @@ def rollout(policy_network):
     print("This simulation was run for {0:.2f} seconds".format(playtime))
     print("Average framerate: {0:.2f} frames per second".format(iter /  playtime))
 
-    return states, actions, rewards, done
+    return states, actions, action_dists rewards, done, asteroids_destroyed
