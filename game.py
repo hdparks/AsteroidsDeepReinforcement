@@ -114,7 +114,7 @@ def loop():
 
 
 def render():
-    text = "FPS: {0:.2f}    Playtime: {1:.2f}".format(clock.get_fps(),playtime)
+    text = str(playtime)
     pygame.display.set_caption(text) # Print framerate in titlebar
 
     # Blitting stage
