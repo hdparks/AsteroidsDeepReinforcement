@@ -23,8 +23,8 @@ Until finally, it learned to duck and weave well enough to clear the asteroids c
 If you want to take a crack at this version of asteroids,
 <ol>
 <li> Download these files</li>
-<li> Navigate to AsteroidsDeepReinforcement in the console</li>
-<li> Enter <code> python game.py </code></li>
+<li> Open a console and navigate to the AsteroidsDeepReinforcement file</li>
+<li> Enter <code> python game.py </code> to start the game!</li>
 </ol>
 
 Controls:
@@ -52,5 +52,5 @@ If you would like to train your own Asteroid-blasting AI pilot, I recommend the 
     </ul>
   </li>
   <li>Create a PolicyNetwork object <code>network = PolicyNetwork().cuda()</code></li>
-  <li>Train the network for as long as you want using <code>train(network, # )</code> Where "#" is the desired number of iterations. Each iteration should take anywhere from 10-20. I was able to see the results above after 1800 instances of training (~6 hours)</li>
+  <li>Train the network for as long as you want using <code>train(network, # )</code> Where "#" is the desired number of iterations. Each iteration should take anywhere from 10-20 seconds on an average GPU. I was able to see the results above after 1800 instances of training (~6 hours).</li>
 </ol>
