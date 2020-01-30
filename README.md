@@ -10,7 +10,7 @@ The AI started with an *agressive* policy:
 
 ![Full Speed Ahead, Captian](results/Beginning.gif)
 
-It then picked up on my personal technique, the "Turn and Shoot":
+It then picked up on the classic Asteroids technique, the "Turn and Shoot":
 
 ![The Cosmos are Alive with the Sound of Music and Lasers](results/Middle.gif)
 
